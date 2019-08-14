@@ -5,20 +5,6 @@ pipeline{
         maven 'mymaven' 
     }
     stages{
-        stage('checkout'){
-            steps{
-                
-                withCredentials([string(credentialsId: 'XFS-git', variable: 'git')]) {
-              
-                checkout([$class: 'GitSCM',
-                branches: [[name: 'origin/dev']],
-                extensions: [[$class: 'WipeWorkspace']],
-                userRemoteConfigs: [[url: "${git}"]]
-            
-                ])
-                }
-            }
-        }
       stage ('build and test'){
             steps{
                 
