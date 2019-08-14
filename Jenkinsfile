@@ -39,29 +39,15 @@ sh label: '', script: "curl -u $usr:$pass --upload-file target/xfs-0.0.1-SNAPSHO
             steps{
               withCredentials([usernamePassword(credentialsId: 'XFS_Deployment', passwordVariable: 'pass', usernameVariable: 'userId')]) {
                     sh "cd target;ls"
-                    sh label: '', script:'curl -u $userId:$pass  http://ec2-52-66-245-186.ap-south-1.compute.amazonaws.com:8080/manager/text/undeploy?path=/XFS-deploy'
-                    sh label: '', script: 'curl -u  $userId:$pass --upload-file target/xfs-0.0.1-SNAPSHOT.war http://ec2-52-66-245-186.ap-south-1.compute.amazonaws.com:8080/manager/text/deploy?config=file:/var/lib/tomcat8/xfs-0.0.1-SNAPSHOT.war\\&path=/XFS-deploy'
+                    sh label: '', script:'curl -u $userId:$pass  http://ec2-52-66-245-186.ap-south-1.compute.amazonaws.com:8080/manager/text/undeploy?path=/Backend_XFS'
+                    sh label: '', script: 'curl -u  $userId:$pass --upload-file target/xfs-0.0.1-SNAPSHOT.war http://ec2-52-66-245-186.ap-south-1.compute.amazonaws.com:8080/manager/text/deploy?config=file:/var/lib/tomcat8/xfs-0.0.1-SNAPSHOT.war\\&path=/Backend_XFS'
             }
         }
 
     }
 }
 
- post{
-   success {
-          script{
-              d='{"teamName":"KSR","jobtitle":"'+JOB_NAME+'","bNumber":"'+BUILD_NUMBER+'","bUrl":"'+BUILD_URL+'",buildStatus":"SUCCESS"}'
-              sh "curl -H 'Content-Type: application/json' -X POST -d '${d}'  http://ec2-52-66-245-186.ap-south-1.compute.amazonaws.com:8080/ExtremeFeedbackSystem/api/addbuildinfo"
-          }
-   }
-         failure {
-            script{
-              d='{"teamName":"KSR","jobtitle":"'+JOB_NAME+'","bNumber":"'+BUILD_NUMBER+'","bUrl":"'+BUILD_URL+'",buildStatus":"FAILURE"}'
-        
-            sh "curl -H 'Content-Type: application/json' -X POST -d '${d}'  http://ec2-52-66-245-186.ap-south-1.compute.amazonaws.com:8080/ExtremeFeedbackSystem/api/addbuildinfo"
-         }
 
 }
-}
-}
+
 
